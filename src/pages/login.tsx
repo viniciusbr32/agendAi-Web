@@ -1,6 +1,30 @@
-import { AgendeiLogo } from "./agendei-logo";
+import { useState } from "react";
+import { AgendeiLogo } from "../components/agendei-logo";
+import type { Field, FormData } from "../types/form";
+import { Input } from "../components/ui/input";
 
 export function Login() {
+	const [formData, setFormData] = useState<FormData>({
+		password: "",
+		confirmPassword: "",
+		passwordVisible: false,
+		confirmPasswordVisible: false,
+	});
+
+	const toggleVisibility = (field: Field) => {
+		setFormData((prev) => ({
+			...prev,
+			[field.field]: !prev[field.field],
+		}));
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({
+			...formData,
+			[event.target.name]: event.target.value,
+		});
+	};
+
 	return (
 		<div className="grid w-full grid-cols-12 px-3 lg:px-0">
 			<div className="flex flex-col items-center justify-center h-screen col-span-12 lg:h-auto lg:col-span-5">
@@ -22,10 +46,17 @@ export function Login() {
 								placeholder="E-mail"
 								className="w-full py-3 pl-3 mb-3 rounded border border-[#DFDFDF]"
 							/>
-							<input
+							<Input
 								type="password"
+								onChange={handleChange}
+								name="password"
+								value={formData.password}
 								placeholder="Senha"
-								className="w-full py-3 pl-3 mb-3 rounded border border-[#DFDFDF]"
+								showToggleIcon={true}
+								isVisible={formData.passwordVisible}
+								toggleVisibility={() =>
+									toggleVisibility({ field: "passwordVisible" })
+								}
 							/>
 						</div>
 						<button
