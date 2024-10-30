@@ -4,6 +4,12 @@
 
 @media (max-width: 1024px) {
   html {
-    font-size: 62.5%;
+    /* font-size: 62.5%; */
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
   }
 }
