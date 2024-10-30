@@ -1,4 +1,4 @@
-import type { appointment, Doctor, DoctorService } from "@/types/dataType";
+import type { Appointment, Doctor, DoctorService } from "@/types/dataType";
 
 export const doctors: Doctor[] = [
 	{
@@ -57,7 +57,7 @@ export const doctors: Doctor[] = [
 	},
 ];
 
-export const appointments: appointment[] = [
+export const appointments: Appointment[] = [
 	{
 		id_appointment: 1,
 		service: "Consulta",

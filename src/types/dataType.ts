@@ -5,7 +5,7 @@ export type Doctor = {
 	icon: "M" | "F";
 };
 
-export type appointment = {
+export type Appointment = {
 	id_appointment: number;
 	service: string;
 	doctor: string;

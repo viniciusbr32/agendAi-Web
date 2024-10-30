@@ -7,6 +7,9 @@ import {
 	TableHeader,
 	TableRow,
 } from "./ui/table";
+import { appointments } from "@/constants/data";
+import { formatarData } from "@/utils/formatDate";
+import { formatPrice } from "@/utils/formatPrice";
 
 export function TableData() {
 	return (
@@ -34,31 +37,41 @@ export function TableData() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				<TableRow>
-					<TableCell className="text-lg text-center ">INV001</TableCell>
-					<TableCell className="text-lg text-center ">Paid</TableCell>
-					<TableCell className="text-lg text-center ">Credit Card</TableCell>
-					<TableCell className="text-lg text-center ">
-						29/05/2024 / 08:00
-					</TableCell>
-					<TableCell className="text-lg text-center ">$250.00</TableCell>
-					<TableCell className="text-lg">
-						<div className="flex items-center justify-center gap-2">
-							<button
-								type="button"
-								className="p-3 text-white bg-red-600 rounded"
-							>
-								<Trash2 />
-							</button>
-							<button
-								type="button"
-								className="p-3 text-white rounded bg-blueCustom"
-							>
-								<Edit />
-							</button>
-						</div>
-					</TableCell>
-				</TableRow>
+				{appointments.map((consulta) => (
+					<TableRow key={consulta.id_appointment}>
+						<TableCell className="text-lg text-center ">
+							{consulta.user}
+						</TableCell>
+						<TableCell className="text-lg text-center ">
+							{consulta.doctor}
+						</TableCell>
+						<TableCell className="text-lg text-center ">
+							{consulta.service}
+						</TableCell>
+						<TableCell className="text-lg text-center ">
+							{formatarData(consulta.booking_date, consulta.booking_hour)}
+						</TableCell>
+						<TableCell className="text-lg text-center ">
+							{formatPrice(consulta.price)}
+						</TableCell>
+						<TableCell className="text-lg">
+							<div className="flex items-center justify-center gap-2">
+								<button
+									type="button"
+									className="p-3 text-white bg-red-600 rounded"
+								>
+									<Trash2 />
+								</button>
+								<button
+									type="button"
+									className="p-3 text-white rounded bg-blueCustom"
+								>
+									<Edit />
+								</button>
+							</div>
+						</TableCell>
+					</TableRow>
+				))}
 			</TableBody>
 		</Table>
 	);

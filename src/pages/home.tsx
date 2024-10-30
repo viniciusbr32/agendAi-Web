@@ -1,3 +1,4 @@
+import { doctors } from "@/constants/data";
 import { Header } from "../components/ui/header";
 import { TableData } from "@/components/table-data";
 
@@ -33,9 +34,9 @@ export function Home() {
 						<div className="flex items-center gap-5">
 							<select className="p-4 bg-white border border-gray-300 rounded focus:outline-none">
 								<option value="">Selecione uma opção</option>
-								<option value="opcao1">Opção 1</option>
-								<option value="opcao2">Opção 2</option>
-								<option value="opcao3">Opção 3</option>
+								{doctors.map((doctor) => (
+									<option key={doctor.id_doctor}>{doctor.name}</option>
+								))}
 							</select>
 							<button
 								type="button"
