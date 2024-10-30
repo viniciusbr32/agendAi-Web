@@ -70,7 +70,7 @@ export function Register() {
 							<Input
 								type="password"
 								onChange={handleChange}
-								name="password"
+								name="confirmPassword"
 								value={formData.confirmPassword}
 								placeholder="Senha"
 								showToggleIcon={true}
