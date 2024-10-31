@@ -7,11 +7,38 @@ import {
 	TableHeader,
 	TableRow,
 } from "./ui/table";
-import { appointments } from "@/constants/data";
+
 import { formatarData } from "@/utils/formatDate";
 import { formatPrice } from "@/utils/formatPrice";
+import api from "@/services/api";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/contexts/users/auth";
+import type { Appointment } from "@/types/dataType";
 
 export function TableData() {
+	const [dataAppointments, setDataAppointments] = useState<
+		Appointment[] | null
+	>(null);
+
+	const { user } = useContext(AuthContext);
+	const token = user?.token;
+
+	useEffect(() => {
+		const getAppointments = async () => {
+			try {
+				const response = await api("/admin/appointments", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				setDataAppointments(response.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getAppointments();
+	}, [token]);
+
 	return (
 		<Table className="pb-10">
 			<TableHeader>
@@ -37,7 +64,7 @@ export function TableData() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{appointments.map((consulta) => (
+				{dataAppointments?.map((consulta) => (
 					<TableRow key={consulta.id_appointment}>
 						<TableCell className="text-lg text-center ">
 							{consulta.user}
