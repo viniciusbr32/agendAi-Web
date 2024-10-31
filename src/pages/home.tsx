@@ -1,8 +1,32 @@
-import { doctors } from "@/constants/data";
 import { Header } from "../components/ui/header";
 import { TableData } from "@/components/table-data";
+import api from "@/services/api";
+import { useContext, useEffect, useState } from "react";
+import type { Doctor } from "@/types/dataType";
+import { AuthContext } from "@/contexts/users/auth";
 
 export function Home() {
+	const [doctors, setDoctors] = useState<Doctor[] | null>(null);
+
+	const { user } = useContext(AuthContext);
+	const token = user?.token;
+
+	useEffect(() => {
+		const getDoctors = async () => {
+			try {
+				const response = await api.get("/doctors", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				setDoctors(response.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getDoctors();
+	}, [token]);
+
 	return (
 		<div className="">
 			<Header />
@@ -34,7 +58,7 @@ export function Home() {
 						<div className="flex items-center gap-5">
 							<select className="p-4 bg-white border border-gray-300 rounded focus:outline-none">
 								<option value="">Selecione uma opção</option>
-								{doctors.map((doctor) => (
+								{doctors?.map((doctor) => (
 									<option key={doctor.id_doctor}>{doctor.name}</option>
 								))}
 							</select>
