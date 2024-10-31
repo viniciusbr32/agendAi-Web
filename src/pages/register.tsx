@@ -2,9 +2,12 @@ import { useState } from "react";
 import { AgendeiLogo } from "../components/agendei-logo";
 import type { Field, FormData } from "../types/form";
 import { Input } from "../components/ui/input";
+import { Link } from "react-router-dom";
 
 export function Register() {
 	const [formData, setFormData] = useState<FormData>({
+		email: "",
+		username: "",
 		password: "",
 		confirmPassword: "",
 		passwordVisible: false,
@@ -42,13 +45,17 @@ export function Register() {
 						</h4>
 						<div className="w-full">
 							<input
-								type="nome"
+								type="text"
+								value={formData.username}
+								onChange={handleChange}
 								placeholder="Nome"
-								name="nome"
+								name="username"
 								className="w-full py-3 pl-3 mb-3 rounded border border-[#DFDFDF]"
 							/>
 							<input
 								type="email"
+								value={formData.email}
+								onChange={handleChange}
 								name="email"
 								placeholder="E-mail"
 								className="w-full py-3 pl-3 mb-3 rounded border border-[#DFDFDF]"
@@ -89,12 +96,14 @@ export function Register() {
 					</form>
 
 					<div className="w-full mt-40">
-						<p className="text-center">
-							Não tenho conta.{" "}
-							<span className="cursor-pointer text-blueCustom">
-								Criar conta agora.
-							</span>
-						</p>
+						<Link to="/login">
+							<p className="text-center">
+								Ja tenho uma conta.{" "}
+								<span className="cursor-pointer text-blueCustom">
+									Acessar agora!
+								</span>
+							</p>
+						</Link>
 					</div>
 				</div>
 			</div>

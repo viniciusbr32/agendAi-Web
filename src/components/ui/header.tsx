@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AgendeiLogoWhite } from "../agendei-logo-white";
 import { DropMenu } from "../drop-menu";
+import { AuthContext } from "@/contexts/users/auth";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
 	const [open, setOpen] = useState<boolean>(false);
 
+	const { logout } = useContext(AuthContext);
+	const navigate = useNavigate();
+
 	const handleOpen = () => {
 		setOpen(!open);
+	};
+
+	const handleLogout = () => {
+		logout();
+		navigate("/login");
 	};
 
 	return (
@@ -20,7 +30,11 @@ export function Header() {
 					<li>Médicos</li>
 				</ul>
 			</div>
-			<DropMenu open={open} handleOpen={handleOpen} />
+			<DropMenu
+				open={open}
+				handleOpen={handleOpen}
+				handleLogout={handleLogout}
+			/>
 		</header>
 	);
 }

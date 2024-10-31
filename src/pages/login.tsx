@@ -1,17 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AgendeiLogo } from "../components/agendei-logo";
-import type { Field, FormData } from "../types/form";
+import type { FieldLogin, FormDataLogin } from "../types/form";
 import { Input } from "../components/ui/input";
+import { Link, useNavigate } from "react-router-dom";
+import api from "@/services/api";
+import { AuthContext } from "@/contexts/users/auth";
+import { AxiosError } from "axios";
+
+interface ApiError {
+	error: string;
+}
 
 export function Login() {
-	const [formData, setFormData] = useState<FormData>({
+	const { login } = useContext(AuthContext);
+	const navigate = useNavigate();
+
+	const [formData, setFormData] = useState<FormDataLogin>({
+		email: "",
 		password: "",
-		confirmPassword: "",
 		passwordVisible: false,
-		confirmPasswordVisible: false,
 	});
 
-	const toggleVisibility = (field: Field) => {
+	const [error, setError] = useState<string | undefined>(undefined);
+
+	const toggleVisibility = (field: FieldLogin) => {
 		setFormData((prev) => ({
 			...prev,
 			[field.field]: !prev[field.field],
@@ -25,6 +37,30 @@ export function Login() {
 		});
 	};
 
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		if (!formData.email || !formData.password) {
+			return null;
+		}
+
+		try {
+			const response = await api.post("/admin/login", {
+				email: formData.email,
+				password: formData.password,
+			});
+
+			login(response.data);
+			navigate("/");
+		} catch (error) {
+			// Verifica se o erro é um AxiosError e se contém a resposta esperada
+			if (error instanceof AxiosError && error.response) {
+				const axiosError = error as AxiosError<ApiError>;
+				setError(axiosError.response?.data.error);
+			}
+		}
+	};
+
 	return (
 		<div className="grid w-full grid-cols-12 px-3 lg:px-0">
 			<div className="flex flex-col items-center justify-center h-screen col-span-12 lg:h-auto lg:col-span-5">
@@ -36,13 +72,19 @@ export function Login() {
 						Gerencie seus agendamentos de forma descomplicada.
 					</p>
 
-					<form className="flex flex-col items-center w-full mt-32">
+					<form
+						onSubmit={handleSubmit}
+						className="flex flex-col items-center w-full mt-32"
+					>
 						<h4 className="mb-6 text-2xl font-semibold text-center">
 							Acesse Sua conta
 						</h4>
 						<div className="w-full">
 							<input
 								type="email"
+								name="email"
+								value={formData.email}
+								onChange={handleChange}
 								placeholder="E-mail"
 								className="w-full py-3 pl-3 mb-3 rounded border border-[#DFDFDF]"
 							/>
@@ -59,6 +101,9 @@ export function Login() {
 								}
 							/>
 						</div>
+						{error !== "" && error !== undefined && (
+							<p className="text-red-500">{error}</p>
+						)}
 						<button
 							type="submit"
 							className="w-full py-3 text-white rounded bg-blueCustom"
@@ -68,12 +113,14 @@ export function Login() {
 					</form>
 
 					<div className="w-full mt-40">
-						<p className="text-center">
-							Não tenho conta.{" "}
-							<span className="cursor-pointer text-blueCustom">
-								Criar conta agora.
-							</span>
-						</p>
+						<Link to="/register">
+							<p className="text-center">
+								Não tenho conta.{" "}
+								<span className="cursor-pointer text-blueCustom">
+									Criar conta agora.
+								</span>
+							</p>
+						</Link>
 					</div>
 				</div>
 			</div>
