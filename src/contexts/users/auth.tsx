@@ -22,12 +22,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const userStorage = localStorage.getItem("user");
+
 		if (userStorage) {
 			setUser(JSON.parse(userStorage));
 		}
-		console.log(userStorage);
 	}, []);
-	console.log(user);
 
 	const login = (users: UserProps) => {
 		setUser(users);
@@ -38,6 +37,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		setUser(null);
 		localStorage.removeItem("user");
 	};
+
+	console.log(user);
 
 	return (
 		<AuthContext.Provider value={{ login, logout, user }}>

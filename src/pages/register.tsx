@@ -3,6 +3,7 @@ import { AgendeiLogo } from "../components/agendei-logo";
 import type { Field, FormData } from "../types/form";
 import { Input } from "../components/ui/input";
 import { Link } from "react-router-dom";
+import api from "@/services/api";
 
 export function Register() {
 	const [formData, setFormData] = useState<FormData>({
@@ -28,6 +29,29 @@ export function Register() {
 		});
 	};
 
+	const registerUser = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		try {
+			const response = await api.post(
+				"/admin/register",
+				{
+					name: formData.username,
+					email: formData.email,
+					password: formData.password,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				},
+			);
+
+			console.log("usuario registrado com sucesso", response.data);
+		} catch (error) {
+			console.error("Erro ao registrar o usuário:", error);
+		}
+	};
+
 	return (
 		<div className="grid w-full grid-cols-12 px-3 lg:px-0">
 			<div className="flex flex-col items-center justify-center h-screen col-span-12 lg:h-auto lg:col-span-5">
@@ -39,7 +63,10 @@ export function Register() {
 						Crie sua conta agora mesmo.
 					</p>
 
-					<form className="flex flex-col items-center w-full mt-32">
+					<form
+						onSubmit={registerUser}
+						className="flex flex-col items-center w-full mt-32"
+					>
 						<h4 className="mb-6 text-2xl font-semibold text-center">
 							Preencha os campos abaixo
 						</h4>

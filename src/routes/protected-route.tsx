@@ -1,13 +1,14 @@
-import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { AuthContext } from "@/contexts/users/auth";
+import { createContext, useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-	const user = localStorage.getItem("user");
+export function ProtectedRoute() {
+	const user = createContext(AuthContext);
 
 	useEffect(() => {
 		if (!user) {
 			console.log("Usuário não autenticado, redirecionando para login.");
 		}
 	}, [user]);
-	return user ? children : <Navigate to="/login" replace />;
+	return user ? <Outlet /> : <Navigate to="/login" replace />;
 }

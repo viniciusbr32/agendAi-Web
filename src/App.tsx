@@ -13,14 +13,17 @@ export function App() {
 				<Routes>
 					<Route path="/register" element={<Register />} />
 					<Route path="/login" element={<Login />} />
-					<Route
+					{/* <Route
 						path="/"
 						element={
 							<ProtectedRoute>
-								<Home />
+								<Route path="/" element={<Home />} />
 							</ProtectedRoute>
 						}
-					/>
+					/> */}
+					<Route path="/" element={<ProtectedRoute />}>
+						<Route path="/" element={<Home />} />
+					</Route>
 				</Routes>
 			</Router>
 		</AuthProvider>
