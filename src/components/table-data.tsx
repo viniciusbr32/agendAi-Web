@@ -15,8 +15,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/users/auth";
 import type { Appointment } from "@/types/dataType";
 
-export function TableData() {
+export function TableData({ selectValue }: { selectValue: string }) {
 	const [dataAppointments, setDataAppointments] = useState<
+		Appointment[] | null
+	>(null);
+	const [dataAppointmentsFiltred, setDataAppointmentsFiltred] = useState<
 		Appointment[] | null
 	>(null);
 
@@ -38,6 +41,17 @@ export function TableData() {
 		};
 		getAppointments();
 	}, [token]);
+
+	useEffect(() => {
+		const appointments = dataAppointments || [];
+
+		const dataAppointmentsFiltred =
+			selectValue === ""
+				? appointments
+				: appointments?.filter((data) => selectValue.includes(data.doctor));
+
+		setDataAppointmentsFiltred(dataAppointmentsFiltred);
+	}, [dataAppointments, selectValue]);
 
 	return (
 		<Table className="pb-10">
@@ -64,41 +78,45 @@ export function TableData() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{dataAppointments?.map((consulta) => (
-					<TableRow key={consulta.id_appointment}>
-						<TableCell className="text-lg text-center ">
-							{consulta.user}
-						</TableCell>
-						<TableCell className="text-lg text-center ">
-							{consulta.doctor}
-						</TableCell>
-						<TableCell className="text-lg text-center ">
-							{consulta.service}
-						</TableCell>
-						<TableCell className="text-lg text-center ">
-							{formatarData(consulta.booking_date, consulta.booking_hour)}
-						</TableCell>
-						<TableCell className="text-lg text-center ">
-							{formatPrice(consulta.price)}
-						</TableCell>
-						<TableCell className="text-lg">
-							<div className="flex items-center justify-center gap-2">
-								<button
-									type="button"
-									className="p-3 text-white bg-red-600 rounded"
-								>
-									<Trash2 />
-								</button>
-								<button
-									type="button"
-									className="p-3 text-white rounded bg-blueCustom"
-								>
-									<Edit />
-								</button>
-							</div>
-						</TableCell>
-					</TableRow>
-				))}
+				{dataAppointmentsFiltred && dataAppointmentsFiltred.length > 0 ? (
+					dataAppointmentsFiltred.map((consulta) => (
+						<TableRow key={consulta.id_appointment}>
+							<TableCell className="text-lg text-center ">
+								{consulta.user}
+							</TableCell>
+							<TableCell className="text-lg text-center ">
+								{consulta.doctor}
+							</TableCell>
+							<TableCell className="text-lg text-center ">
+								{consulta.service}
+							</TableCell>
+							<TableCell className="text-lg text-center ">
+								{formatarData(consulta.booking_date, consulta.booking_hour)}
+							</TableCell>
+							<TableCell className="text-lg text-center ">
+								{formatPrice(consulta.price)}
+							</TableCell>
+							<TableCell className="text-lg">
+								<div className="flex items-center justify-center gap-2">
+									<button
+										type="button"
+										className="p-3 text-white bg-red-600 rounded"
+									>
+										<Trash2 />
+									</button>
+									<button
+										type="button"
+										className="p-3 text-white rounded bg-blueCustom"
+									>
+										<Edit />
+									</button>
+								</div>
+							</TableCell>
+						</TableRow>
+					))
+				) : (
+					<p>Nenhum agendamento encontrado.</p>
+				)}
 			</TableBody>
 		</Table>
 	);

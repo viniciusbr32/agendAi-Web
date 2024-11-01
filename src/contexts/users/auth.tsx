@@ -38,8 +38,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		localStorage.removeItem("user");
 	};
 
-	console.log(user);
-
 	return (
 		<AuthContext.Provider value={{ login, logout, user }}>
 			{children}

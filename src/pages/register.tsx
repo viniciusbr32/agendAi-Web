@@ -32,7 +32,7 @@ export function Register() {
 	const registerUser = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
-			const response = await api.post(
+			await api.post(
 				"/admin/register",
 				{
 					name: formData.username,
@@ -45,10 +45,8 @@ export function Register() {
 					},
 				},
 			);
-
-			console.log("usuario registrado com sucesso", response.data);
 		} catch (error) {
-			console.error("Erro ao registrar o usuário:", error);
+			console.log(error);
 		}
 	};
 

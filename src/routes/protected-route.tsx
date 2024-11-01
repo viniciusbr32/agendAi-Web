@@ -7,7 +7,7 @@ export function ProtectedRoute() {
 
 	useEffect(() => {
 		if (!user) {
-			console.log("Usuário não autenticado, redirecionando para login.");
+			alert("Usuário não autenticado, redirecionando para login.");
 		}
 	}, [user]);
 	return user ? <Outlet /> : <Navigate to="/login" replace />;

@@ -7,6 +7,8 @@ import { AuthContext } from "@/contexts/users/auth";
 
 export function Home() {
 	const [doctors, setDoctors] = useState<Doctor[] | null>(null);
+	const [selectValue, setSelectValue] = useState("");
+	const [tempSelectValue, setTempSelectValue] = useState("");
 
 	const { user } = useContext(AuthContext);
 	const token = user?.token;
@@ -26,6 +28,10 @@ export function Home() {
 		};
 		getDoctors();
 	}, [token]);
+
+	const handleFilterButtonClick = () => {
+		setSelectValue(tempSelectValue); // Atualiza o valor final apenas quando o botão é clicado
+	};
 
 	return (
 		<div className="">
@@ -56,14 +62,19 @@ export function Home() {
 						</div>
 
 						<div className="flex items-center gap-5">
-							<select className="p-4 bg-white border border-gray-300 rounded focus:outline-none">
-								<option value="">Selecione uma opção</option>
+							<select
+								value={tempSelectValue}
+								onChange={(e) => setTempSelectValue(e.target.value)}
+								className="p-4 bg-white border border-gray-300 rounded focus:outline-none"
+							>
+								<option value="">Filtre por todos ou selecione</option>
 								{doctors?.map((doctor) => (
 									<option key={doctor.id_doctor}>{doctor.name}</option>
 								))}
 							</select>
 							<button
 								type="button"
+								onClick={handleFilterButtonClick}
 								className="px-6 py-4 font-semibold text-white rounded bg-blueCustom"
 							>
 								Filtrar
@@ -74,7 +85,7 @@ export function Home() {
 			</div>
 
 			<div className="w-full px-9">
-				<TableData />
+				<TableData selectValue={selectValue} />
 			</div>
 		</div>
 	);
