@@ -1,9 +1,7 @@
 export const formatarData = (data: string, hora: string) => {
 	const formato = new Intl.DateTimeFormat("pt-BR", {
-		day: "2-digit",
-		month: "2-digit",
-		year: "numeric",
+		dateStyle: "short",
 	});
 
-	return `${formato.format(new Date(data))} ${hora}h`;
+	return formato.format(new Date(`${data}T${hora}`));
 };

@@ -9,7 +9,7 @@ export type Appointment = {
 	id_appointment: number;
 	service: string;
 	doctor: string;
-	specialty: string;
+	specialty?: string;
 	booking_date: string;
 	booking_hour: string;
 	user: string;
