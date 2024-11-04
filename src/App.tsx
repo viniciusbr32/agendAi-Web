@@ -5,6 +5,7 @@ import { Register } from "./pages/register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/users/auth";
 import { ProtectedRoute } from "./routes/protected-route";
+import { EditAppointment } from "./pages/edit-appointment";
 
 export function App() {
 	return (
@@ -13,14 +14,7 @@ export function App() {
 				<Routes>
 					<Route path="/register" element={<Register />} />
 					<Route path="/login" element={<Login />} />
-					{/* <Route
-						path="/"
-						element={
-							<ProtectedRoute>
-								<Route path="/" element={<Home />} />
-							</ProtectedRoute>
-						}
-					/> */}
+					<Route path="/edit/appointment/:id" element={<EditAppointment />} />
 					<Route path="/" element={<ProtectedRoute />}>
 						<Route path="/" element={<Home />} />
 					</Route>

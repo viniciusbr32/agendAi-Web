@@ -10,10 +10,12 @@ export type Appointment = {
 	service: string;
 	doctor: string;
 	specialty?: string;
+	id_user?: number;
 	booking_date: string;
 	booking_hour: string;
 	user: string;
 	price: number;
+	id_doctor?: number;
 };
 
 export type DoctorService = {

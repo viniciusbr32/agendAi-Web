@@ -4,6 +4,7 @@ import { TableCell, TableRow } from "./ui/table";
 import { formatarData } from "@/utils/formatDate";
 import { formatPrice } from "@/utils/formatPrice";
 import type { Appointment } from "@/types/dataType";
+import { useNavigate } from "react-router-dom";
 
 export function TableData({
 	user,
@@ -14,6 +15,8 @@ export function TableData({
 	service,
 	id_appointment,
 }: Appointment) {
+	const navigate = useNavigate();
+
 	return (
 		<TableRow key={id_appointment}>
 			<TableCell className="text-lg text-center ">{user}</TableCell>
@@ -33,6 +36,7 @@ export function TableData({
 					</button>
 					<button
 						type="button"
+						onClick={() => navigate(`edit/appointment/${id_appointment}`)}
 						className="p-3 text-white rounded bg-blueCustom"
 					>
 						<Edit />
