@@ -23,3 +23,9 @@ export type DoctorService = {
 	description: string;
 	price: number;
 };
+
+export type Users = {
+	email: string;
+	id_user: number;
+	name: string;
+};
