@@ -5,6 +5,15 @@ import { formatarData } from "@/utils/formatDate";
 import { formatPrice } from "@/utils/formatPrice";
 import type { Appointment } from "@/types/dataType";
 import { useNavigate } from "react-router-dom";
+import { ModalDelete } from "./modal-delete";
+import { useContext, useState } from "react";
+import api from "@/services/api";
+import { AuthContext } from "@/contexts/users/auth";
+import { toast } from "react-toastify";
+
+type TableDataProps = Appointment & {
+	onRefresh: () => void;
+};
 
 export function TableData({
 	user,
@@ -14,8 +23,37 @@ export function TableData({
 	doctor,
 	service,
 	id_appointment,
-}: Appointment) {
+	onRefresh,
+}: TableDataProps) {
 	const navigate = useNavigate();
+	const [open, setOpen] = useState<boolean>(false);
+	const [selectedId, setSelectedId] = useState<number | null>(null);
+
+	const { user: users } = useContext(AuthContext);
+	const token = users?.token;
+
+	const closeModal = () => setOpen(false);
+	const openModal = (id: number) => {
+		setSelectedId(id);
+		setOpen(true);
+	};
+
+	const DeleteAppointment = async () => {
+		try {
+			await api.delete(`/appointments/${selectedId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			setOpen(false);
+			onRefresh();
+			toast.success("Agendamento deletado com sucesso", {
+				autoClose: 1000,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		<TableRow key={id_appointment}>
@@ -31,7 +69,11 @@ export function TableData({
 			</TableCell>
 			<TableCell className="text-lg">
 				<div className="flex items-center justify-center gap-2">
-					<button type="button" className="p-3 text-white bg-red-600 rounded">
+					<button
+						type="button"
+						className="p-3 text-white bg-red-600 rounded"
+						onClick={() => openModal(id_appointment)}
+					>
 						<Trash2 />
 					</button>
 					<button
@@ -43,6 +85,11 @@ export function TableData({
 					</button>
 				</div>
 			</TableCell>
+			<ModalDelete
+				open={open}
+				onDelete={DeleteAppointment}
+				onOpenChange={closeModal}
+			/>
 		</TableRow>
 	);
 }

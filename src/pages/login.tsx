@@ -51,6 +51,7 @@ export function Login() {
 			});
 
 			login(response.data);
+
 			navigate("/");
 		} catch (error) {
 			// Verifica se o erro é um AxiosError e se contém a resposta esperada

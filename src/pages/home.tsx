@@ -11,6 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
 	const [doctors, setDoctors] = useState<Doctor[] | null>(null);
@@ -24,11 +25,12 @@ export function Home() {
 
 	const { user } = useContext(AuthContext);
 	const token = user?.token;
+	const navigate = useNavigate();
 
 	const getAppointments = async () => {
 		if (!token) return;
 		try {
-			const response = await api("/admin/appointments", {
+			const response = await api.get("/admin/appointments", {
 				params: {
 					id_doctor: idDoctor,
 					dt_start: dtStart,
@@ -74,6 +76,7 @@ export function Home() {
 						<p className="text-2xl font-bold">Agendamentos</p>
 						<button
 							type="button"
+							onClick={() => navigate("/create/appointment")}
 							className="px-3 py-3 rounded text-blueCustom outline outline-2"
 						>
 							Novo Agendamento
@@ -157,6 +160,7 @@ export function Home() {
 								booking_hour={appointment.booking_hour}
 								price={appointment.price}
 								id_appointment={appointment.id_appointment}
+								onRefresh={getAppointments}
 							/>
 						))}
 					</TableBody>

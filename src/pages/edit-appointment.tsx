@@ -110,7 +110,9 @@ export function EditAppointment() {
 			!formData.id_doctor ||
 			!formData.id_service
 		) {
-			return null;
+			return toast.error("Preencha todos os dados", {
+				autoClose: 1000,
+			});
 		}
 		const idAppointment = dataAppointments?.id_appointment;
 
@@ -238,6 +240,7 @@ export function EditAppointment() {
 					</div>
 					<div className="flex items-center justify-end w-full gap-2">
 						<button
+							onClick={() => navigate("/")}
 							type="button"
 							className="px-6 py-2 font-semibold rounded text-blueCustom outline outline-1 outline-blueCustom"
 						>

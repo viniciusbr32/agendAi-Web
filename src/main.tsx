@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<App />
 		<ToastContainer />
+		<App />
 	</StrictMode>,
 );
